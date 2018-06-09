@@ -11,27 +11,29 @@ public class FileDao {
     private static final String DEFAULT_OUTPUT_FILE_PATH_NAME = "OUTPUT.TXT";
 
 
-    static String readOneLineFromFile(String filePathName) throws IOException, NullPointerException {
+    private static String[] readLinesFromFile(String filePathName) throws IOException, NullPointerException {
         Path path = Paths.get(filePathName);
-        BufferedReader reader = null;
-        String line;
-        try {
-            reader = Files.newBufferedReader(path, Charset.forName("UTF-8"));
+        BufferedReader reader=null;
+        String[] lines = new String[2];
+        try{
+            reader=Files.newBufferedReader(path,Charset.forName("UTF-8"));
 
-            line = reader.readLine();
-            if (line == null) {
+            lines[0] = reader.readLine();
+            lines[1] = reader.readLine();
+            if(lines[0] == null || lines[1] == null){
                 throw new NullPointerException("no data");
             }
         } finally {
-            if(reader!=null) {
+            if(reader!=null){
                 reader.close();
             }
         }
-        return line;
+        return lines;
     }
 
-    static String readOneLineFromFile() throws IOException, NullPointerException {
-        return readOneLineFromFile(DEFAULT_INPUT_FILE_PATH_NAME);
+
+    static String[] readLinesFromFile() throws IOException, NullPointerException {
+        return readLinesFromFile(DEFAULT_INPUT_FILE_PATH_NAME);
     }
 
     static void writeStringToFile(String dataToWrite, String filePathName) throws IOException {
